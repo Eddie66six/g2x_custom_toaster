@@ -11,17 +11,25 @@ class G2xCustomToaster {
   /// [navigationKey] navigation key inserted in the mainapp(MaterialApp)
   ///
   /// [milliseconds to discard] is the animation duration.
+  /// 
+  /// [backgroundColor] default: Colors.white.withOpacity(0.8).
+  /// 
+  /// [titleStyle] default: TextStyle(fontWeight: FontWeight.bold).
   ///
   /// [onFinish] is called when finish animation.
   static void showOnTop(
-      {@required IconData icon,
+      {@required Widget icon,
       @required String title,
       @required String mensage,
       @required GlobalKey<NavigatorState> navigationKey,
       int millisecondsToStart = 200,
       int millisecondsToDismissAnd = 1000,
       Function onFinish,
-      Function onTap}) {
+      Function onTap,
+      double borderRadius = 5,
+      Color backgroundColor,
+      TextStyle titleStyle,
+      TextStyle messageStyle}) {
     _navigationKey = navigationKey;
     _overlayEntryForRemove.add(_buildEntry(
         icon,
@@ -31,7 +39,11 @@ class G2xCustomToaster {
         millisecondsToDismissAnd,
         onFinish,
         onTap,
-        _overlayEntryForRemove.length));
+        _overlayEntryForRemove.length,
+        borderRadius,
+        backgroundColor,
+        titleStyle,
+        messageStyle));
     if (_overlayEntryForRemove.length == 1) {
       _insertNext(navigationKey);
     }
@@ -52,14 +64,18 @@ class G2xCustomToaster {
 
   static var _overlayEntryForRemove = List<OverlayEntry>();
   static OverlayEntry _buildEntry(
-      IconData icon,
+      Widget icon,
       String title,
       String mensage,
       int millisecondsToStart,
       int millisecondsToDismissAnd,
       Function onFinish,
       Function onTap,
-      int index) {
+      int index,
+      double borderRadius,
+      Color backgroundColor,
+      TextStyle titleStyle,
+      TextStyle messageStyle) {
     var _overlayEntry = OverlayEntry(builder: (BuildContext buildContext) {
       return _G2xCustomToasterComponent(
           key: UniqueKey(),
@@ -74,7 +90,11 @@ class G2xCustomToaster {
             _removeFirst();
           },
           onTap: onTap,
-          icon: icon);
+          icon: icon,
+          borderRadius: borderRadius,
+          backgroundColor: backgroundColor,
+          titleStyle: titleStyle,
+          messageStyle: messageStyle,);
     });
     return _overlayEntry;
   }
@@ -87,7 +107,11 @@ class _G2xCustomToasterComponent extends StatefulWidget {
   final int millisecondsToDismissAnd;
   final Function onFinish;
   final Function onTap;
-  final IconData icon;
+  final Widget icon;
+  final double borderRadius;
+  final Color backgroundColor;
+  final TextStyle titleStyle;
+  final TextStyle messageStyle;
   const _G2xCustomToasterComponent(
       {Key key,
       this.title,
@@ -96,7 +120,11 @@ class _G2xCustomToasterComponent extends StatefulWidget {
       this.millisecondsToDismissAnd,
       this.onFinish,
       this.onTap,
-      this.icon})
+      this.icon,
+      this.borderRadius,
+      this.backgroundColor,
+      this.titleStyle,
+      this.messageStyle})
       : super(key: key);
   @override
   __G2xCustomToasterComponentState createState() =>
@@ -226,8 +254,8 @@ class __G2xCustomToasterComponentState extends State<_G2xCustomToasterComponent>
           margin: const EdgeInsets.symmetric(horizontal: 10),
           width: MediaQuery.of(context).size.width - 20,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: Colors.white.withOpacity(0.8),
+            borderRadius: BorderRadius.circular(widget.borderRadius),
+            color: widget.backgroundColor ?? Colors.white.withOpacity(0.8),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -235,20 +263,20 @@ class __G2xCustomToasterComponentState extends State<_G2xCustomToasterComponent>
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(widget.icon),
+                  widget.icon,
                   SizedBox(width: 5),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width - 70,
+                  Expanded(
                     child: Text(
                       widget.title,
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                      overflow: TextOverflow.ellipsis,
+                      style: widget.titleStyle ?? TextStyle(fontWeight: FontWeight.bold),
+                      //overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],
               ),
               SizedBox(height: 3),
-              Text(widget.mensage, textAlign: TextAlign.start)
+              Text(widget.mensage, textAlign: TextAlign.start,
+               style: widget.messageStyle)
             ],
           ),
         ),

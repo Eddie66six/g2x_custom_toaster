@@ -56,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(child: RaisedButton(child: Text("Show"), onPressed: (){
         index = index + 1;
         G2xCustomToaster.showOnTop(
-          icon: index%2 == 0 ? Icons.notifications : Icons.chat,
+          icon: Icon(index%2 == 0 ? Icons.notifications : Icons.chat, size: 35),
           title: title[index%2 == 0 ? 0 : 1],
           mensage: mensage[index%2 == 0 ? 0 : 1],
           navigationKey: _navigationKey,

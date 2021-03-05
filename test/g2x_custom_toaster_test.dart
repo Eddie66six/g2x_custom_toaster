@@ -16,7 +16,7 @@ void main() {
       child: Text(""),
       onPressed: () {
         G2xCustomToaster.showOnTop(
-            icon: Icons.chat,
+            icon: Icon(Icons.chat),
             title: "G2xCustomToaster Title",
             mensage: "Content",
             navigationKey: _navigationKey,
@@ -48,7 +48,7 @@ void main() {
       child: Text(""),
       onPressed: () {
         G2xCustomToaster.showOnTop(
-            icon: Icons.chat,
+            icon: Icon(Icons.chat),
             title: "G2xCustomToaster Title",
             mensage: "Content",
             navigationKey: _navigationKey,
