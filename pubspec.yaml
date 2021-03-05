@@ -1,6 +1,6 @@
 name: g2x_custom_toaster
 description: display a toaster notification with animation, the toaster notification is removed automatically or by a horizontal swipe
-version: 0.0.2
+version: 0.0.3
 homepage: https://github.com/Eddie66six
 
 environment:
